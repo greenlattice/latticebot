@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import creds
 
 roledict = {'i am 18+': '18+',
             'dyn': 'dynastic',
@@ -7,6 +8,7 @@ roledict = {'i am 18+': '18+',
             'bl': 'black spaces',
             'dg': 'dark greens',
             'lg': 'light greens',
+            'minecraft': 'minecraft',
             'mobile': 'place_mobile'}
 emojidict = {'grapu': 'grapu',
              'graypu': 'graypu',
@@ -95,7 +97,8 @@ async def on_message(message):
                                   'All of the site specific roles will provide you access to their respective diplomacy channel\n' +
                                   'bl - Makes you a Black Tile User\n' +
                                   'dg - Makes you a Dark Green Tile User\n' +
-                                  'lg - Makes you a Light Green Tile User')
+                                  'lg - Makes you a Light Green Tile User\n' +
+                                  'minecraft - Lets you get pinged for minecraft announcements')
 
 @client.event
 async def on_ready():
@@ -104,4 +107,4 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-client.run('no creds plz')
+client.run(creds.GimmeCreds())
