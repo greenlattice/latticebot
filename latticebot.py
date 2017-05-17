@@ -16,6 +16,7 @@ emojidict = {'grapu': 'grapu',
              'gaypu': 'gaypu',
              'cherru': 'cherru',
              'voidpu': 'voidpu',
+             'screwu': 'screwu',
              'owo': 'owo'}
 client = discord.Client()
 
