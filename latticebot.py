@@ -76,8 +76,10 @@ async def on_message(message):
             if roleobj in userroles:
                 with open('emoji.yml', 'a') as writefile:
                     writefile.write('\'' + part1 + '\': \'' + part2 + '\'\n')
-            sendmsg = 'Saying ' + part1 + ' will now cause latticebot to react with ' + part2
-            await client.send_message(message.channel, sendmsg)
+                sendmsg = 'Saying ' + part1 + ' will now cause latticebot to react with ' + part2
+                await client.send_message(message.channel, sendmsg)
+            else:
+                await client.send_message(message.channel, 'You do not have permission to use this command')
 
     elif message.content.lower().startswith('!role '):
         addlist = []
