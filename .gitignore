@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+*.swp
+creds.py
+emoji.yml
+
 # C extensions
 *.so
 

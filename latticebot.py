@@ -1,6 +1,8 @@
+import os
 import discord
 import asyncio
 import creds
+import yaml
 
 roledict = {'i am 18+': '18+',
             'dyn': 'dynastic',
@@ -10,14 +12,6 @@ roledict = {'i am 18+': '18+',
             'lg': 'light greens',
             'minecraft': 'minecraft',
             'mobile': 'place_mobile'}
-emojidict = {'grapu': 'grapu',
-             'graypu': 'graypu',
-             'greypu': 'graypu',
-             'gaypu': 'gaypu',
-             'cherru': 'cherru',
-             'voidpu': 'voidpu',
-             'screwu': 'screwu',
-             'owo': 'owo'}
 client = discord.Client()
 
 def find_role_by_name(rolename, message):
@@ -32,9 +26,22 @@ def find_role_by_name(rolename, message):
 
 @client.event
 async def on_message(message):
+    emojidict = {'grapu': 'grapu',
+                 'graypu': 'graypu',
+                 'greypu': 'graypu',
+                 'gaypu': 'gaypu',
+                 'cherru': 'cherru',
+                 'voidpu': 'voidpu',
+                 'screwu': 'screwu',
+                 'owo': 'owo'}
+
     # we do not want the bot to reply to itself
     if message.author == client.user:
         return
+
+    if os.path.isfile('emoji.yml'):
+        with open('emoji.yml', 'r') as emojifile:
+            emojidict = yaml.load(emojifile.read())
 
     for item in emojidict:
         if item in message.content.lower():
@@ -51,7 +58,28 @@ async def on_message(message):
     if message.content.lower() == 'ayy':
         await client.send_message(message.channel, 'lmao')
 
-    if message.content.lower().startswith('!role '):
+    if message.content.lower().startswith('!emoji '):
+        userroles = message.author.roles
+        roleobj = ''
+        rolelist = message.server.roles
+        userin = message.content.lower().replace('!emoji ', '')
+        messagelist = userin.split()
+        if len(messagelist) == 2:
+            part1 = messagelist[0]
+            part2 = messagelist[1]
+        else:
+            await client.send_message(message.channel, 'Invalid number of arguments')
+        for item in rolelist:
+            if 'admin' == item.name.lower():
+                roleobj = item
+        if roleobj != '':
+            if roleobj in userroles:
+                with open('emoji.yml', 'a') as writefile:
+                    writefile.write('\'' + part1 + '\': \'' + part2 + '\'\n')
+            sendmsg = 'Saying ' + part1 + ' will now cause latticebot to react with ' + part2
+            await client.send_message(message.channel, sendmsg)
+
+    elif message.content.lower().startswith('!role '):
         addlist = []
         rmlist = []
         addname = []
