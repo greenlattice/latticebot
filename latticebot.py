@@ -119,6 +119,28 @@ async def on_message(message):
             returnstring = ', '.join(returnlist)
             await client.send_message(message.channel, 'Your roles are: ' + returnstring)
 
+    elif message.content.lower().startswith('!coords'):
+        if 'pxls' in str(message.channel).lower():
+            userin = message.content.lower().replace('!coords ', '')
+            coordlist = []
+            if ',' in userin:
+                userin = userin.replace(' ','')
+                coordlist = userin.split(',')
+            else:
+                coordlist = userin.split()
+
+            if len(coordlist) == 2:
+                xcoord = coordlist[0]
+                ycoord = coordlist[1]
+                returnstring = 'https://pxls.space/#x=' + str(xcoord) + '&y=' + str(ycoord) + '&scale=20'
+                await client.send_message(message.channel, returnstring)
+            else:
+                await client.send_message(message.channel, 'Invalid number of coords, try again')
+        else:
+            await client.send_message(message.channel, 'This command only works in pxls rooms')
+
+
+
     elif message.content.lower().startswith('!help'):
         await client.send_message(message.channel, 'To request a role, just say "!role " and any number of the following options:\n' +
                                   'i am 18+ - gains you access to our NSFW room\n' +
