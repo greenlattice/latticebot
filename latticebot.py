@@ -119,23 +119,45 @@ async def on_message(message):
             returnstring = ', '.join(returnlist)
             await client.send_message(message.channel, 'Your roles are: ' + returnstring)
 
-    elif message.content.lower().startswith('!coords'):
-        if 'pxls' in str(message.channel).lower():
-            userin = message.content.lower().replace('!coords ', '')
-            coordlist = []
-            if ',' in userin:
-                userin = userin.replace(' ','')
-                coordlist = userin.split(',')
-            else:
-                coordlist = userin.split()
+    elif '!coords ' in message.content.lower():
+        if 'pxls' in str(message.channel).lower() or 'bot_testing' in str(message.channel).lower():
+            xval = 0
+            yval = 0
+            msgsplit = message.content.lower().split()
+            for index, item in enumerate(msgsplit):
+                if '!coords' in item:
+                    try:
+                        nextitem = msgsplit[int(index) + 1]
+                    except IndexError:
+                        await client.send_message(message.channel, 'Improperly formatted input, try again.')
+                        break
+                    if ',' in nextitem:
+                        if nextitem.split(',')[1]:
+                            nextsplit = nextitem.split(',')
+                            xval = nextsplit[0]
+                            yval = nextsplit[1]
+                        else:
+                            xval = nextitem.replace(',','').strip()
+                            try:
+                                yval = msgsplit[index + 2]
+                            except IndexError:
+                                await client.send_message(message.channel, 'Improperly formatted input, try again.')
+                                break
+                    else:
+                        xval = nextitem
+                        try:
+                            yval = msgsplit[index + 2]
+                        except IndexError:
+                            await client.send_message(message.channel, 'Improperly formatted input, try again.')
+                            break
 
-            if len(coordlist) == 2:
-                xcoord = coordlist[0]
-                ycoord = coordlist[1]
-                returnstring = 'https://pxls.space/#x=' + str(xcoord) + '&y=' + str(ycoord) + '&scale=20'
+            try:
+                xval = int(xval)
+                yval = int(yval)
+                returnstring = 'https://pxls.space/#x=' + str(xval) + '&y=' + str(yval) + '&scale=20'
                 await client.send_message(message.channel, returnstring)
-            else:
-                await client.send_message(message.channel, 'Invalid number of coords, try again')
+            except ValueError:
+                await client.send_message(message.channel, 'Tried to send non-number values, try again')
         else:
             await client.send_message(message.channel, 'This command only works in pxls rooms')
 
