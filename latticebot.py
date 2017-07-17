@@ -121,7 +121,8 @@ async def on_message(message):
 
     elif '!coords ' in message.content.lower():
         stillgood = True
-        if 'pxls' in str(message.channel).lower() or 'bot_testing' in str(message.channel).lower():
+        channelname = str(message.channel).lower()
+        if 'pxls' in channelname or 'bot_testing' in channelname or 'dynastic' in channelname:
             xval = 0
             yval = 0
             msgsplit = message.content.lower().split()
@@ -159,7 +160,10 @@ async def on_message(message):
                 try:
                     xval = int(xval)
                     yval = int(yval)
-                    returnstring = 'https://pxls.space/#x=' + str(xval) + '&y=' + str(yval) + '&scale=20'
+                    if 'pxls' in channelname:
+                        returnstring = 'https://pxls.space/#x=' + str(xval) + '&y=' + str(yval) + '&scale=20'
+                    elif 'dynastic' in channelname:
+                        returnstring = 'https://place.dynastic.co/#x=' + str(xval) + '&y=' + str(yval)
                     await client.send_message(message.channel, returnstring)
                 except ValueError:
                     await client.send_message(message.channel, 'Tried to send non-number values, try again')
